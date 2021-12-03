@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="var" path="ILOG_BR_HOME/teamserver/lib/jrules-language.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_HOME/teamserver/lib/jrules-engine.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_HOME/teamserver/lib/jrules-teamserver.jar" sourcepath="/ILOG_BR_HOME/teamserver/src/jrules-teamserver-8.10.4.0-sources.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_HOME/teamserver/lib/jrules-ruleartifacts.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_HOME/teamserver/lib/javax.servlet-api-3.0.1.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_HOME/teamserver/lib/spring-web-5.0.12.RELEASE.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_STUDIO_HOME/lib/poi-4.0.1.jar"/>
+	<classpathentry kind="var" path="ILOG_BR_STUDIO_HOME/lib/poi-ooxml-4.0.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

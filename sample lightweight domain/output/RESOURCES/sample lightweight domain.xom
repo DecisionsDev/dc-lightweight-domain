@@ -1,0 +1,206 @@
+include "ilog/rules/xml/binding/xsd_types.xom";
+
+package com.ibm.rules;
+
+
+class IlogRulesXmlPackage
+        property "ilog.rules.xml.packageInfo" {
+            "1" {
+                xmlName "{http://www.ibm.com/rules}order",
+                xomType "com.ibm.rules.Order"
+            },
+            version "ilog.rules.xml.binding.IlrXmlDefaultDataDriver_7_0"
+        }
+        property visible "false"
+{
+}
+
+public class Order
+        extends ilog.rules.xml.IlrXmlObject
+        property "ilog.rules.engine.driver" "ilog.rules.xml.binding.IlrXmlClassDriver"
+        property "ilog.rules.xml.classInfo" {
+            derivation "EXTENSION",
+            model "sequence",
+            version "ilog.rules.xml.binding.IlrXmlDefaultDataDriver_7_0",
+            xmlFieldNumber "13",
+            xmlScope "global",
+            xmlType "{http://www.ibm.com/rules}order",
+            xsdLocation "schema.xsd"
+        }
+{
+
+    public class ActionType
+            extends ilog.rules.xml.types.xsd.XsdString
+            property "ilog.rules.engine.driver" "ilog.rules.xml.binding.IlrXmlClassDriver"
+            property "ilog.rules.xml.simpleTypeInfo" {
+                version "ilog.rules.xml.binding.IlrXmlDefaultDataDriver_7_0",
+                xmlScope "local",
+                xsdLocation "schema.xsd"
+            }
+    {
+        domain {"Buy", "Sell"}
+        public static java.lang.String[] getEnumerations();
+        public static int getLength();
+        public static int getMaxLength();
+        public static int getMinLength();
+        public static string getPattern();
+        public static string toXmlString(string instance);
+    }
+
+    public class ReasonsType
+            extends ilog.rules.xml.types.xsd.XsdString
+            property "ilog.rules.engine.driver" "ilog.rules.xml.binding.IlrXmlClassDriver"
+            property "ilog.rules.xml.simpleTypeInfo" {
+                version "ilog.rules.xml.binding.IlrXmlDefaultDataDriver_7_0",
+                xmlScope "local",
+                xsdLocation "schema.xsd"
+            }
+    {
+        domain {"Customer Preferences", "Black Listed Stocks", "Bad Client"}
+        public static java.lang.String[] getEnumerations();
+        public static int getLength();
+        public static int getMaxLength();
+        public static int getMinLength();
+        public static string getPattern();
+        public static string toXmlString(string instance);
+    }
+
+    public class SecurityTypeType
+            extends ilog.rules.xml.types.xsd.XsdString
+            property "ilog.rules.engine.driver" "ilog.rules.xml.binding.IlrXmlClassDriver"
+            property "ilog.rules.xml.simpleTypeInfo" {
+                version "ilog.rules.xml.binding.IlrXmlDefaultDataDriver_7_0",
+                xmlScope "local",
+                xsdLocation "schema.xsd"
+            }
+    {
+        domain {"Bonds", "Futures", "Stock"}
+        public static java.lang.String[] getEnumerations();
+        public static int getLength();
+        public static int getMaxLength();
+        public static int getMinLength();
+        public static string getPattern();
+        public static string toXmlString(string instance);
+    }
+
+    public class StatusType
+            extends ilog.rules.xml.types.xsd.XsdString
+            property "ilog.rules.engine.driver" "ilog.rules.xml.binding.IlrXmlClassDriver"
+            property "ilog.rules.xml.simpleTypeInfo" {
+                version "ilog.rules.xml.binding.IlrXmlDefaultDataDriver_7_0",
+                xmlScope "local",
+                xsdLocation "schema.xsd"
+            }
+    {
+        domain {"Accepted", "Rejected", "Pending", "Blocked"}
+        public static java.lang.String[] getEnumerations();
+        public static int getLength();
+        public static int getMaxLength();
+        public static int getMinLength();
+        public static string getPattern();
+        public static string toXmlString(string instance);
+    }
+    public string action domain {"Buy", "Sell"}
+                property "ilog.rules.xml.fieldInfo" {
+                    index "8",
+                    xmlKind "ELEMENT",
+                    xmlName "action",
+                    xomComponentType "com.ibm.rules.Order.ActionType"
+                };
+    public int amount
+                property "ilog.rules.xml.fieldInfo" {
+                    index "2",
+                    xmlKind "ELEMENT",
+                    xmlName "amount",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}int",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdInt"
+                };
+    public string city
+                property "ilog.rules.xml.fieldInfo" {
+                    index "5",
+                    xmlKind "ELEMENT",
+                    xmlName "city",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public string country
+                property "ilog.rules.xml.fieldInfo" {
+                    index "6",
+                    xmlKind "ELEMENT",
+                    xmlName "country",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public string currency
+                property "ilog.rules.xml.fieldInfo" {
+                    index "4",
+                    xmlKind "ELEMENT",
+                    xmlName "currency",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public ilog.rules.xml.types.IlrDateTime dateTime
+                property "ilog.rules.xml.fieldInfo" {
+                    index "10",
+                    xmlKind "ELEMENT",
+                    xmlName "dateTime",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}dateTime",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdDateTime"
+                };
+    public string exchange
+                property "ilog.rules.xml.fieldInfo" {
+                    index "3",
+                    xmlKind "ELEMENT",
+                    xmlName "exchange",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public string id
+                property "ilog.rules.xml.fieldInfo" {
+                    index "0",
+                    xmlKind "ELEMENT",
+                    xmlName "id",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public string reasons domain {"Customer Preferences", "Black Listed Stocks", "Bad Client"}
+                property "ilog.rules.xml.fieldInfo" {
+                    index "12",
+                    xmlKind "ELEMENT",
+                    xmlName "reasons",
+                    xomComponentType "com.ibm.rules.Order.ReasonsType"
+                };
+    public string sector
+                property "ilog.rules.xml.fieldInfo" {
+                    index "7",
+                    xmlKind "ELEMENT",
+                    xmlName "sector",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public string securityType domain {"Bonds", "Futures", "Stock"}
+                property "ilog.rules.xml.fieldInfo" {
+                    index "9",
+                    xmlKind "ELEMENT",
+                    xmlName "securityType",
+                    xomComponentType "com.ibm.rules.Order.SecurityTypeType"
+                };
+    public string status domain {"Accepted", "Rejected", "Pending", "Blocked"}
+                property "ilog.rules.xml.fieldInfo" {
+                    index "11",
+                    xmlKind "ELEMENT",
+                    xmlName "status",
+                    xomComponentType "com.ibm.rules.Order.StatusType"
+                };
+    public string stock
+                property "ilog.rules.xml.fieldInfo" {
+                    index "1",
+                    xmlKind "ELEMENT",
+                    xmlName "stock",
+                    xmlType "{http://www.w3.org/2001/XMLSchema}string",
+                    xomComponentType "ilog.rules.xml.types.xsd.XsdString"
+                };
+    public Order();
+    public void setUnknownAmount();
+}
+

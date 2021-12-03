@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.brl:ActionRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.brl="http://ilog.rules.studio/model/brl.ecore">
+  <name>order city + country</name>
+  <uuid>0e411eda-d6d1-4049-873d-4ccc8d95aa56</uuid>
+  <locale>en_US</locale>
+  <definition><![CDATA[if
+    the city of the order is "Copenhagen"
+then
+    set the country of the order to "Denmark" ;]]></definition>
+</ilog.rules.studio.model.brl:ActionRule>

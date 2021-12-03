@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><teamservers>
+<teamserver>
+<target dataSource="" login="rtsAdmin" url="http://localhost:9090/decisioncenter"/>
+<entry baseType="B2XMapping" checksum="2785692706" projectName="sample lightweight domain" qualifiedName="model" sourceCS="E7C9126EBD46974482A82383BD8ED6F6" targetCS="2785692706" type="B2XMapping" uuid="c2dfe7c2-879d-4bd4-ad89-64c9b2433399"/>
+<entry baseType="B2XMapping" checksum="2785692706" projectName="sample lightweight domain" qualifiedName="model" sourceCS="3F3129DF4606824D2B797FA3C701649A" targetCS="2785692706" type="B2XMapping" uuid="fbb1b87a-6bf1-474f-90e1-a41886953fad"/>
+<entry baseType="BRLRule" checksum="4099085977" projectName="sample lightweight domain" qualifiedName="order city" sourceCS="E7C3E6CFA42B21D3D90CDA7733C5B7F2" targetCS="4099085977" type="BRLRule" uuid="ad2439d2-2749-494b-b1fa-6b522705cdff"/>
+<entry baseType="BRLRule" checksum="853963169" projectName="sample lightweight domain" qualifiedName="order city + country" sourceCS="D6732476D2A8AFC5982DBA72B056FE22" targetCS="853963169" type="BRLRule" uuid="0e411eda-d6d1-4049-873d-4ccc8d95aa56"/>
+<entry baseType="BRLRule" checksum="2538000316" projectName="sample lightweight domain" qualifiedName="order sector" sourceCS="8D582A6D85F7AA32AE7B5D5DE9D7D11E" targetCS="2538000316" type="BRLRule" uuid="62f518b0-c779-493e-92d1-65a340dea053"/>
+<entry baseType="BusinessObjectModel" checksum="2785692706" projectName="sample lightweight domain" qualifiedName="model" sourceCS="662004134E10FBDECAAFDD4476F34178" targetCS="2785692706" type="BusinessObjectModel" uuid="027b67e5-f82b-46c3-a2f8-22660f9aea1d"/>
+<entry baseType="BusinessObjectModel" checksum="1033571892" projectName="sample lightweight domain" qualifiedName="model" sourceCS="8E86E23DFD474011B7400A0E69099999" targetCS="1033571892" type="BusinessObjectModel" uuid="22494ba0-cc74-44b2-ba18-49c1264ed804"/>
+<entry baseType="DecisionTable" checksum="3130827187" projectName="sample lightweight domain" qualifiedName="default currency" sourceCS="062605118A324726F52BB99C64A30CDE" targetCS="3130827187" type="DecisionTable" uuid="39ea4e58-dcc3-4b6a-8825-6370b15c9621"/>
+<entry baseType="Resource" checksum="1453912841" projectName="sample lightweight domain" qualifiedName="continents.xlsx" sourceCS="2268E3EDA8808D2A47ADA1E4852B30AE" targetCS="1453912841" type="Resource" uuid="continents.xlsx"/>
+<entry baseType="Resource" checksum="1116406368" projectName="sample lightweight domain" qualifiedName="domains/cities.xlsx" sourceCS="17ECF23705A9690A0E834A377143FE0A" targetCS="1116406368" type="Resource" uuid="domains/cities.xlsx"/>
+<entry baseType="Resource" checksum="1056259663" projectName="sample lightweight domain" qualifiedName="domains/countries.xlsx" sourceCS="DD38C0E585AA4C6375E1F0099B4143BC" targetCS="1056259663" type="Resource" uuid="domains/countries.xlsx"/>
+<entry baseType="Resource" checksum="313945898" projectName="sample lightweight domain" qualifiedName="domains/currencies.xlsx" sourceCS="80014D7E071D09960E00EDE27BF799C9" targetCS="313945898" type="Resource" uuid="domains/currencies.xlsx"/>
+<entry baseType="Resource" checksum="2208259787" projectName="sample lightweight domain" qualifiedName="domains/lightweight/countries.xlsx" sourceCS="DD38C0E585AA4C6375E1F0099B4143BC" targetCS="2208259787" type="Resource" uuid="domains/lightweight/countries.xlsx"/>
+<entry baseType="Resource" checksum="1154643749" projectName="sample lightweight domain" qualifiedName="domains/sectors.xlsx" sourceCS="B1DA3D082872AB9B4CAEF5BB28F0868C" targetCS="1154643749" type="Resource" uuid="domains/sectors.xlsx"/>
+<entry baseType="Resource" checksum="3927656076" projectName="sample lightweight domain" qualifiedName="schema.xsd" sourceCS="00B97528FEE9DA3F56646C18BBA3CC24" targetCS="3927656076" type="Resource" uuid="schema.xsd"/>
+<entry baseType="Resource" checksum="195840421" projectName="sample lightweight domain" qualifiedName="xom-libraries/sample-lightweight-domain-xom.zip" sourceCS="6F333B27966DFA05F4E10F85A17F40EB" targetCS="195840421" type="Resource" uuid="xom-libraries/sample-lightweight-domain-xom.zip"/>
+<entry baseType="RuleProjectInfo" checksum="1486715294" projectName="sample lightweight domain" qualifiedName="sample lightweight domain" sourceCS="800E0CA91B2AFC2C52F1F14C824FE759" targetCS="1486715294" type="RuleProjectInfo" uuid="9f355e1c-a49f-4fe0-88ab-43ec423f8f1a"/>
+<entry baseType="Vocabulary" checksum="2785692706" projectName="sample lightweight domain" qualifiedName="model_en_US" sourceCS="E5A3C1CF13B8816D7C455B0D5388EDA0" targetCS="2785692706" type="Vocabulary" uuid="306b1c2d-e14a-4485-936a-59f635457740"/>
+<entry baseType="Vocabulary" checksum="2785692706" projectName="sample lightweight domain" qualifiedName="model_en_US" sourceCS="B9B490D841CB215A1138865A342435E4" targetCS="2785692706" type="Vocabulary" uuid="8598a29b-82cf-458d-99d9-a7273d8d4298"/>
+</teamserver>
+</teamservers>

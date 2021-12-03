@@ -1,0 +1,4 @@
+/.settings/
+/bin/
+ant-repackage-war.cmd
+preferences.properties

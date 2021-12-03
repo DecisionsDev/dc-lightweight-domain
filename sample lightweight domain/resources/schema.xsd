@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17                                              -->
+<!-- Copyright IBM Corp. 2013, 2016. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+<xsd:schema targetNamespace="http://www.ibm.com/rules" xmlns="http://www.ibm.com/rules" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xsd:element name="order" type="order"/>
+	<xsd:complexType name="order">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="stock" type="xsd:string"/>
+			<xsd:element name="amount" type="xsd:int"/>
+			<xsd:element name="exchange" type="xsd:string"/>
+			<xsd:element name="currency" type="xsd:string"/>
+			<xsd:element name="city" type="xsd:string"/>
+			<xsd:element name="country" type="xsd:string"/>
+			<xsd:element name="sector" type="xsd:string"/>
+			<xsd:element name="action">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="Buy"/>
+						<xsd:enumeration value="Sell"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="securityType">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="Bonds"/>
+						<xsd:enumeration value="Futures"/>
+						<xsd:enumeration value="Stock"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="dateTime" type="xsd:dateTime"/>
+			<xsd:element name="status">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="Accepted"/>
+						<xsd:enumeration value="Rejected"/>
+						<xsd:enumeration value="Pending"/>
+						<xsd:enumeration value="Blocked"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="reasons">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="Customer Preferences"/>
+						<xsd:enumeration value="Black Listed Stocks"/>
+						<xsd:enumeration value="Bad Client"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
