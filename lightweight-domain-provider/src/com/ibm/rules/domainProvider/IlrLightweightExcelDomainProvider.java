@@ -10,9 +10,18 @@ import org.apache.poi.ss.usermodel.Row;
 public class IlrLightweightExcelDomainProvider extends IlrLightweightAbstractExcelDomainProvider {
 
 	protected Iterator<Row> getRowIterator(ByteArrayInputStream inputStream, int sheetIndex) throws IOException {
-		try (HSSFWorkbook wb = new HSSFWorkbook(inputStream)) {
+		HSSFWorkbook wb = null;
+		try {
+			wb = new HSSFWorkbook(inputStream);
 			HSSFSheet sheet = wb.getSheetAt(sheetIndex);
-			return sheet.rowIterator();
+			return sheet.rowIterator();			
+		}
+		finally {
+			try {
+				wb.close();
+			} catch (Throwable e) {
+				// ignore noSuchMethodError that may happen with older versions of the POI libraries because the close method is not implemented 
+			}
 		}
 	}
 }
