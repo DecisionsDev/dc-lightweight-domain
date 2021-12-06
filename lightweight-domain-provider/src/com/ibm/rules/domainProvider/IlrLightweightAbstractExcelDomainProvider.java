@@ -34,10 +34,10 @@ public abstract class IlrLightweightAbstractExcelDomainProvider extends IlrLight
 	// provider names (class names)
 	public static String EXCEL_2003_PROVIDER = "com.ibm.rules.domainProvider.msexcel2003";
 	public static String EXCEL_2007_PROVIDER = "com.ibm.rules.domainProvider.msexcel2007";
-	public static String BOMLESS_EXCEL_2003_PROVIDER = "com.ibm.rules.lightweightdomainProvider.msexcel2003";
-	public static String BOMLESS_EXCEL_2007_PROVIDER = "com.ibm.rules.lightweightdomainProvider.msexcel2007";
-	public static String EXCEL_PROVIDERS[] = {EXCEL_2003_PROVIDER, BOMLESS_EXCEL_2003_PROVIDER,
-											  EXCEL_2007_PROVIDER, BOMLESS_EXCEL_2007_PROVIDER};
+	public static String LIGHTWEIGHT_EXCEL_2003_PROVIDER = "com.ibm.rules.lightweightdomainProvider.msexcel2003";
+	public static String LIGHTWEIGHT_EXCEL_2007_PROVIDER = "com.ibm.rules.lightweightdomainProvider.msexcel2007";
+	public static String EXCEL_PROVIDERS[] = {EXCEL_2003_PROVIDER, LIGHTWEIGHT_EXCEL_2003_PROVIDER,
+											  EXCEL_2007_PROVIDER, LIGHTWEIGHT_EXCEL_2007_PROVIDER};
 
 	private String[] labelsTab;
 	private ArrayList<String> labels;

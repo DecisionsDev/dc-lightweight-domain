@@ -80,9 +80,6 @@ public class LightweightDomainResourceMgr {
 		return (domain == null ? null : domain.getLabels());
 	}
 	
-//	public void dispose() {
-//	}
-
 	public IlrResource getResource (IlrLightweightDomainValueProvider domain) {
 		return (domain == null ? null : ((IlrLightweightDomainResourceProvider) domain).getResource());
 	}
@@ -237,12 +234,12 @@ public class LightweightDomainResourceMgr {
 																								  IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
 		}
 		if (!Arrays.asList(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS).contains(valueProviderName)) {
-			throw new IlrLightweightDomainException("custom property value should be one of " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS), IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
+			throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS));
 		}
-		String providerClassName = (valueProviderName == IlrLightweightAbstractExcelDomainProvider.BOMLESS_EXCEL_2003_PROVIDER ||
-								    valueProviderName == IlrLightweightAbstractExcelDomainProvider.EXCEL_2003_PROVIDER) ?
-								    		IlrLightweightExcelDomainProvider.class.getCanonicalName() :				
-								    		IlrLightweightExcel2007DomainProvider.class.getCanonicalName();						
+		String providerClassName = (valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2007_PROVIDER) ||
+								    valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.EXCEL_2007_PROVIDER)) ?
+								    		IlrLightweightExcel2007DomainProvider.class.getCanonicalName() :
+								    		IlrLightweightExcelDomainProvider.class.getCanonicalName();
 
 		IlrSession session = getSession();
 		if (session == null) {
