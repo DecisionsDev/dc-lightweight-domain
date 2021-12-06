@@ -1,21 +1,12 @@
 package com.ibm.rules.domainProvider;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import ilog.rules.brl.syntaxtree.IlrSyntaxTree;
 import ilog.rules.brl.value.info.IlrAbstractValueProvider;
-import ilog.rules.teamserver.model.IlrSession;
 
 /**
  * @author Frederic Mercier
@@ -23,62 +14,40 @@ import ilog.rules.teamserver.model.IlrSession;
  */
 public class LightweightDomainValueProvider extends IlrAbstractValueProvider 
 {
-	static final String CLASS_FQN = LightweightDomainValueProvider.class.getCanonicalName();
-	static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
+	private static final String CLASS_FQN = LightweightDomainValueProvider.class.getCanonicalName();
+	private static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
+
+	private static final ThreadLocal<IlrLightweightDomainValueProvider> latestDomain = new ThreadLocal<IlrLightweightDomainValueProvider>();
 
 	private LightweightDomainValueInfo valueInfo;
-	private Map<IlrSession, IlrLightweightDomainValueProvider> domainMap = Collections.synchronizedMap(new HashMap<IlrSession, IlrLightweightDomainValueProvider>());
 	 
 	public LightweightDomainValueProvider(LightweightDomainValueInfo valueInfo) {
 		this.valueInfo = valueInfo;
 	}
 
-	private IlrSession getSession() 
-	{
-		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		HttpServletRequest request = (requestAttributes == null ? null : requestAttributes.getRequest());
-		return request == null ? null : (IlrSession) request.getSession().getAttribute("session");
+	private IlrLightweightDomainValueProvider getDomain() {
+		return latestDomain.get();
 	}
-
-	private IlrLightweightDomainValueProvider getDomain() 
-	{
-		IlrSession session = getSession();
-		if (session == null) {
-			LOGGER.warning("null session");
-		}
-		return session == null ? null : domainMap.get(session);
+	
+	private void setDomain(IlrLightweightDomainValueProvider domain) {
+		latestDomain.set(domain);
 	}
-
-	/*
-	 * Dispose of the value provider.
-	 * remove any allocated resource
-	 */
-	@Override
-	public void dispose() 
-	{
-		IlrSession session = getSession();
-		if (session != null) {
-			domainMap.remove(session);		
-		}
-	}
-
+	
 	/*
 	 * @return the array of values
 	 */
 	@Override
 	public Object[] getValues() 
 	{	
+		LOGGER.finer("getValues()");
+
 		Object[] tab = valueInfo.getResourceMgr().getLabels(getDomain());
 
-		if (LOGGER.isLoggable(Level.FINER)) {
-			StringBuilder sb = new StringBuilder("getValues()");
-			if (LOGGER.isLoggable(Level.FINEST)) {
-				sb.append(" = ")
-				  .append(Arrays.toString(tab));
-				LOGGER.finest(sb.toString());
-			} else {
-				LOGGER.finer(sb.toString());
-			}
+		if (LOGGER.isLoggable(Level.FINEST)) {
+			LOGGER.finest(new StringBuilder("getValues()")
+							.append(" = ")
+							.append(Arrays.toString(tab))
+							.toString());
 		}
 		return tab;
 	}
@@ -92,16 +61,14 @@ public class LightweightDomainValueProvider extends IlrAbstractValueProvider
 	public void prepare(IlrSyntaxTree.Node node) 
 	{
 		LOGGER.finest("prepare");
-		IlrSession session = getSession();
 
 		try {
 			IlrLightweightDomainValueProvider domain = valueInfo.getResourceMgr().findBomlessDomain(node, true);
-			if (session != null) {
-				domainMap.put(session, domain);		
-			}
+			setDomain(domain);
 		} 
 		catch (IlrLightweightDomainException e) {
 			LOGGER.log(Level.WARNING, e.getParameter() == null ? e.getReason() : e.getReason() + " : " + e.getParameter(), e);
+			setDomain(null);
 		}
 	}
 
