@@ -1,10 +1,13 @@
 package com.ibm.rules.domainProvider;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,12 +22,18 @@ import ilog.rules.brl.syntaxtree.IlrSyntaxTree;
 import ilog.rules.brl.util.IlrPropertyManager;
 import ilog.rules.brl.util.IlrPropertyManager.Property;
 import ilog.rules.teamserver.brm.IlrBaseline;
+import ilog.rules.teamserver.brm.IlrBrmPackage;
+import ilog.rules.teamserver.brm.IlrPackageKind;
 import ilog.rules.teamserver.brm.IlrResource;
 import ilog.rules.teamserver.brm.IlrRulePackage;
 import ilog.rules.teamserver.brm.IlrRuleProject;
+import ilog.rules.teamserver.model.IlrDefaultSearchCriteria;
+import ilog.rules.teamserver.model.IlrElementDetails;
+import ilog.rules.teamserver.model.IlrElementSummary;
 import ilog.rules.teamserver.model.IlrObjectNotFoundException;
 import ilog.rules.teamserver.model.IlrSession;
 import ilog.rules.teamserver.model.IlrSessionHelperEx;
+import ilog.rules.teamserver.model.permissions.IlrRoleRestrictedPermissionException;
 import ilog.rules.vocabulary.model.IlrConcept;
 import ilog.rules.vocabulary.model.IlrVocabulary;
 import ilog.rules.vocabulary.model.bom.IlrBOMVocabulary;
@@ -234,6 +243,10 @@ public class LightweightDomainResourceMgr {
 		if (resourceName != null)
 		{
 			bNewProperties = true;
+
+			if (resourceName.trim().isEmpty()) {
+				throw new IlrLightweightDomainException("empty custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);
+			}
 			
 			valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_FORMAT);
 			if (valueProviderName == null)
@@ -260,10 +273,16 @@ public class LightweightDomainResourceMgr {
 		else
 		{
 			resourceName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);		
+			if (resourceName == null) {
+				// if neither LIGHTWEIGHT_RESOURCE nor DOMAIN_PROVIDER_RESOURCE are defined, report that the preferred one LIGHTWEIGHT_RESOURCE is missing
+				throw new IlrLightweightDomainException("missing custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);
+			}
+			if (resourceName.trim().isEmpty()) {
+				throw new IlrLightweightDomainException("empty custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);
+			}
 			valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
-			if (resourceName == null || valueProviderName == null) {
-				throw new IlrLightweightDomainException("missing custom property", resourceName == null ? IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE : 
-																									  IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
+			if (valueProviderName == null) {
+				throw new IlrLightweightDomainException("missing custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
 			}
 			if (!Arrays.asList(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS).contains(valueProviderName)) {
 				throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS));
@@ -273,7 +292,7 @@ public class LightweightDomainResourceMgr {
 									    		IlrLightweightExcel2007DomainProvider.class.getCanonicalName() :
 									    		IlrLightweightExcelDomainProvider.class.getCanonicalName();
 		}
-		
+
 		IlrSession session = getSession();
 		if (session == null) {
 			if ((domain = (IlrLightweightDomainValueProvider) cache_members.get(member.getFullyQualifiedName() + id)) != null) {
@@ -282,23 +301,8 @@ public class LightweightDomainResourceMgr {
 			throw new IlrLightweightDomainException("null session", null);
 		}
 
-		IlrResource resource = null;
-		try {
-			int indexOf = resourceName.lastIndexOf(".");
-			resource = IlrSessionHelperEx.getResourceFromPath(session, indexOf == -1 ? resourceName : resourceName.substring(0, indexOf));
-		} catch (IlrObjectNotFoundException e) {
-			if (resourceName.lastIndexOf(".") != resourceName.indexOf(".")) { // Defect 120237
-				int indexOf = resourceName.indexOf(".");
-				try {
-					resource = IlrSessionHelperEx.getResourceFromPath(session, indexOf == -1 ? resourceName : resourceName.substring(0, indexOf));
-				} catch (IlrObjectNotFoundException e1) {
-					throw new IlrLightweightDomainException(e1, "cannot find the resource file '" + resourceName + "'");
-				}
-			}
-		}
-		if (resource == null) {
-			throw new IlrLightweightDomainException("cannot find the resource file '" + resourceName + "'", "");
-		}
+		IlrResource resource = findResource(resourceName, session);
+
 		if (projectAndBranch == null) {
 			try {
 				IlrRuleProject project = resource.getProject();
@@ -306,7 +310,7 @@ public class LightweightDomainResourceMgr {
 				projectAndBranch = new StringBuilder(project.getName()).append('(').append(branch.getName()).append(')').toString();
 			} catch (IlrObjectNotFoundException e) {}
 		}
-        
+
 		String uuid = resource.getUuid();
 		if ((domain = (IlrLightweightDomainValueProvider) cache_resources.get(uuid + id)) != null) {
 			/*
@@ -354,7 +358,57 @@ public class LightweightDomainResourceMgr {
 		}
 		return domain;
 	}
+
+	IlrResource findResource (String resourceName, IlrSession session) throws IlrLightweightDomainException
+	{		
+		// split the full path name
+		StringTokenizer st = new StringTokenizer(resourceName.trim(), "/");
+		ArrayList<String> list = new ArrayList<>();
+		while (st.hasMoreTokens()) {
+			list.add(st.nextToken());
+		}
+		String[] s = (String[]) list.toArray(new String[0]);
+
+		// path only
+		String[] s2 = new String[s.length - 1];
+		System.arraycopy(s, 0, s2, 0, s2.length);
+
+		// name only
+		String nameAndExtension = s[s.length - 1];
 		
+		// look for the package
+		IlrBrmPackage brm = session.getBrmPackage();
+		IlrElementSummary rulePackage;
+		try {
+			rulePackage = IlrSessionHelperEx.getHierarchyFromPath(session, session.getWorkingBaseline(), brm.getRulePackage(), s2, true, null, IlrPackageKind.RESOURCE_LITERAL).get(0);
+		} catch (IlrObjectNotFoundException e) {
+			throw new IlrLightweightDomainException(e, "cannot find the resource file '" + resourceName + "'");
+		}
+
+		// look for the resource
+		int indexOf = nameAndExtension.length();
+		while (indexOf != -1)
+		{
+			indexOf = nameAndExtension.lastIndexOf(".", indexOf - 1);
+			String name      = indexOf == -1 ? nameAndExtension : nameAndExtension.substring(0, indexOf);
+			String extension = indexOf == -1 ? ""               : nameAndExtension.substring(indexOf);
+			
+			IlrDefaultSearchCriteria search = new IlrDefaultSearchCriteria(brm.getResource(),
+													Arrays.asList(new Object[] { brm.getPackageElement_RulePackage(), brm.getModelElement_Name(), brm.getResource_Extension() }), 
+													Arrays.asList(new Object[] { rulePackage,                         name,                       extension }));
+			try {
+				List<IlrElementDetails> packageElements = session.findElementDetails(search);
+				if (packageElements.size() == 1)
+					return (IlrResource) packageElements.get(0);
+				
+			} catch (IlrRoleRestrictedPermissionException | IlrObjectNotFoundException e) {
+				throw new IlrLightweightDomainException(e, "cannot find the resource file '" + resourceName + "'");
+			}
+		}
+		
+		throw new IlrLightweightDomainException("cannot find the resource file '" + resourceName + "'", "");
+	}
+	
 	private IlrSession getSession() {
 		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = (requestAttributes == null ? null : requestAttributes.getRequest());
