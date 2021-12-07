@@ -18,6 +18,7 @@ import ilog.rules.brl.value.info.IlrValueProvider;
  */
 public class LightweightDomainValueInfo implements IlrValueInfo 
 {	
+	static final String KEY       = "lightweightdomain";
 	static final String CLASS_FQN = LightweightDomainValueInfo.class.getCanonicalName();
 	static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
 	

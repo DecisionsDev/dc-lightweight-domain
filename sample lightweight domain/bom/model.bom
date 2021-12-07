@@ -18,35 +18,25 @@ public class Order
         property "com.ibm.rules.domainProvider.msexcel.sheetIndex" "0"
         property domainProviderResource "domains/cities.xlsx"
         property domainValueProviderName "com.ibm.rules.domainProvider.msexcel2007"
-        property valueInfo "com.ibm.rules.domainProvider.LightweightDomainValueInfo";
+        property valueInfo "lightweightdomain";
     public string country domain
-        property "com.ibm.rules.domainProvider.msexcel.b2xColumn" "1"
-        property "com.ibm.rules.domainProvider.msexcel.hasHeader" "true"
-        property "com.ibm.rules.domainProvider.msexcel.labelColumn.en" "2"
-        property "com.ibm.rules.domainProvider.msexcel.sheetIndex" "0"
-        property domainProviderResource "domains/countries.xlsx"
-        property domainValueProviderName "com.ibm.rules.domainProvider.msexcel2007"
-        property valueInfo "com.ibm.rules.domainProvider.LightweightDomainValueInfo";
+        property "b2xColumn" "1"
+        property "hasHeader" "true"
+        property "labelColumn" "2"
+        property "sheetIndex" "0"
+        property resource "domains/countries.xlsx"
+        property format "msexcel2007"
+        property valueInfo "lightweightdomain";
     public string currency
-        property "com.ibm.rules.domainProvider.msexcel.b2xColumn" "1"
-        property "com.ibm.rules.domainProvider.msexcel.hasHeader" "true"
-        property "com.ibm.rules.domainProvider.msexcel.labelColumn.en" "2"
-        property "com.ibm.rules.domainProvider.msexcel.sheetIndex" "0"
-        property domainProviderResource "domains/currencies.xlsx"
-        property domainValueProviderName "com.ibm.rules.domainProvider.msexcel2007"
-        property valueInfo "com.ibm.rules.domainProvider.LightweightDomainValueInfo";
+        property resource "domains/currencies.xlsx"
+        property valueInfo "lightweightdomain";
     public ilog.rules.xml.types.IlrDateTime dateTime;
     public string exchange;
     public string id;
     public string reasons domain {"Customer Preferences", "Black Listed Stocks", "Bad Client"};
     public string sector
-        property "com.ibm.rules.domainProvider.msexcel.b2xColumn" "1"
-        property "com.ibm.rules.domainProvider.msexcel.hasHeader" "true"
-        property "com.ibm.rules.domainProvider.msexcel.labelColumn.en" "2"
-        property "com.ibm.rules.domainProvider.msexcel.sheetIndex" "0"
-        property domainProviderResource "domains/sectors.xlsx"
-        property domainValueProviderName "com.ibm.rules.domainProvider.msexcel2007"
-        property valueInfo "com.ibm.rules.domainProvider.LightweightDomainValueInfo";
+        property resource "domains/sectors.xls"
+        property valueInfo "lightweightdomain";
     public string securityType domain {"Bonds", "Futures", "Stock"};
     public string status domain {"Accepted", "Rejected", "Pending", "Blocked"};
     public string stock;

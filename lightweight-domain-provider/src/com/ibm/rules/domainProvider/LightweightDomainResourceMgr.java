@@ -220,27 +220,60 @@ public class LightweightDomainResourceMgr {
 	}
 
 	boolean hasExpectedProps (IlrMember member) {
-		return LightweightDomainValueInfo.CLASS_FQN.equals((String) member.getPropertyValue("valueInfo"));
+		return LightweightDomainValueInfo.KEY.equals((String) member.getPropertyValue("valueInfo"));
 	}
 
 	private IlrLightweightDomainValueProvider getDomain (IlrMember member, boolean editing) throws IlrLightweightDomainException
 	{
 		IlrLightweightDomainValueProvider domain;
+		String valueProviderName;
+		String providerClassName;
+		boolean bNewProperties = false;
 
-		String resourceName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);		
-		String valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
-		if (resourceName == null || valueProviderName == null) {
-			throw new IlrLightweightDomainException("missing custom property", resourceName == null ? IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE : 
-																								  IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
+		String resourceName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);	
+		if (resourceName != null)
+		{
+			bNewProperties = true;
+			
+			valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_FORMAT);
+			if (valueProviderName == null)
+			{// guess the format from the extension of the resource file
+				int i = resourceName.lastIndexOf('.');
+				if (i > 0) {					
+					String extension = resourceName.substring(i+1).toLowerCase();
+					     if ("xls". equals(extension)) valueProviderName = IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2003;
+					else if ("xlsx".equals(extension)) valueProviderName = IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2007;
+				}
+			}
+			if (valueProviderName == null || valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2007))
+			{
+				providerClassName = IlrLightweightExcel2007DomainProvider.class.getCanonicalName();
+			}
+			else if (valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2003))
+			{
+				providerClassName = IlrLightweightExcelDomainProvider.class.getCanonicalName();
+			}
+			else {
+				throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_FORMAT + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_PROVIDERS));
+			}
 		}
-		if (!Arrays.asList(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS).contains(valueProviderName)) {
-			throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS));
+		else
+		{
+			resourceName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);		
+			valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
+			if (resourceName == null || valueProviderName == null) {
+				throw new IlrLightweightDomainException("missing custom property", resourceName == null ? IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE : 
+																									  IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
+			}
+			if (!Arrays.asList(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS).contains(valueProviderName)) {
+				throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS));
+			}
+			providerClassName = (valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2007) ||
+									    valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.EXCEL_2007_PROVIDER)) ?
+									    		IlrLightweightExcel2007DomainProvider.class.getCanonicalName() :
+									    		IlrLightweightExcelDomainProvider.class.getCanonicalName();
 		}
-		String providerClassName = (valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2007_PROVIDER) ||
-								    valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.EXCEL_2007_PROVIDER)) ?
-								    		IlrLightweightExcel2007DomainProvider.class.getCanonicalName() :
-								    		IlrLightweightExcelDomainProvider.class.getCanonicalName();
-
+		
 		IlrSession session = getSession();
 		if (session == null) {
 			if ((domain = (IlrLightweightDomainValueProvider) cache_members.get(member.getFullyQualifiedName() + id)) != null) {
@@ -303,7 +336,7 @@ public class LightweightDomainResourceMgr {
         }
         
         // read the Excel file
-        Collection<String> labels = domain.getLabels(member);
+        Collection<String> labels = domain.getLabels(member, bNewProperties);
 
         // set the 2 caches
 		cache_resources.put(uuid + id, domain);
