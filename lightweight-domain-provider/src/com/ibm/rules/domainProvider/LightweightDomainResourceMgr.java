@@ -361,6 +361,8 @@ public class LightweightDomainResourceMgr {
 
 	IlrResource findResource (String resourceName, IlrSession session) throws IlrLightweightDomainException
 	{		
+		IlrBrmPackage brm = session.getBrmPackage();
+
 		// split the full path name
 		StringTokenizer st = new StringTokenizer(resourceName.trim(), "/");
 		ArrayList<String> list = new ArrayList<>();
@@ -369,20 +371,22 @@ public class LightweightDomainResourceMgr {
 		}
 		String[] s = (String[]) list.toArray(new String[0]);
 
-		// path only
-		String[] s2 = new String[s.length - 1];
-		System.arraycopy(s, 0, s2, 0, s2.length);
-
 		// name only
 		String nameAndExtension = s[s.length - 1];
-		
-		// look for the package
-		IlrBrmPackage brm = session.getBrmPackage();
-		IlrElementSummary rulePackage;
-		try {
-			rulePackage = IlrSessionHelperEx.getHierarchyFromPath(session, session.getWorkingBaseline(), brm.getRulePackage(), s2, true, null, IlrPackageKind.RESOURCE_LITERAL).get(0);
-		} catch (IlrObjectNotFoundException e) {
-			throw new IlrLightweightDomainException(e, "cannot find the resource file '" + resourceName + "'");
+
+		// look for the handle of the package containing the resource
+		IlrElementSummary rulePackage = null;
+		if (s.length > 1) 
+		{ 	
+			// path only
+			String[] s2 = new String[s.length - 1];
+			System.arraycopy(s, 0, s2, 0, s2.length);
+
+			try {
+				rulePackage = IlrSessionHelperEx.getHierarchyFromPath(session, session.getWorkingBaseline(), brm.getRulePackage(), s2, true, null, IlrPackageKind.RESOURCE_LITERAL).get(0);
+			} catch (IlrObjectNotFoundException e) {
+				throw new IlrLightweightDomainException(e, "cannot find the resource file '" + resourceName + "'");
+			}
 		}
 
 		// look for the resource
