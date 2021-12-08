@@ -76,7 +76,7 @@ public class LightweightDomainValueProvider extends IlrAbstractValueProvider
      * @param element the element
      * @param locale the locale
      * @return the way the element will appear in the proposed list of values.
-     * In BOM-less domains, elements are not localized.
+     * In light-weight domains, elements are not localized.
 	 */
 	@Override
 	public String getDisplayText(Object element, Locale locale) 
@@ -88,7 +88,7 @@ public class LightweightDomainValueProvider extends IlrAbstractValueProvider
      * @param element the element
      * @param locale the locale
      * @return the way the element will appear in the rule definition.
-     * In BOM-less domains, elements are not localized.
+     * In light-weight domains, elements are not localized.
      * Note: It is surrounded with double quotes because our value descriptor
      *       is IlrStringValueDescriptor.
 	 */
