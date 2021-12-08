@@ -1,5 +1,6 @@
 package com.ibm.rules.domainProvider;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,7 +60,7 @@ public class LightweightDomainResourceMgr {
 	});
 
 	@SuppressWarnings("serial")
-	static Map<String, IlrLightweightDomainValueProvider> cache_members = Collections.synchronizedMap(new LinkedHashMap<String,IlrLightweightDomainValueProvider>(MAX_CACHE_SIZE) {
+	static Map<String, DomainWrapper> cache_members = Collections.synchronizedMap(new LinkedHashMap<String, DomainWrapper>(MAX_CACHE_SIZE) {
 		@SuppressWarnings("rawtypes")
 		@Override
 		protected boolean removeEldestEntry(Map.Entry eldest) {
@@ -69,6 +70,22 @@ public class LightweightDomainResourceMgr {
 
 	String id;
 	String projectAndBranch;
+
+	class DomainWrapper {
+		IlrLightweightDomainValueProvider domain;
+		private LocalTime refTime;
+		
+		public DomainWrapper (IlrLightweightDomainValueProvider domain) {
+			this.domain = domain;
+			reset();
+		}
+		public void reset () {
+			refTime = LocalTime.now();
+		}
+		public boolean recent (long periodInSeconds) {
+			return LocalTime.now().isBefore(refTime.plusSeconds(periodInSeconds));
+		}
+	}
 	
 	public LightweightDomainResourceMgr() {
 		String id = this.toString();
@@ -294,10 +311,14 @@ public class LightweightDomainResourceMgr {
 		}
 
 		IlrSession session = getSession();
-		if (session == null) {
-			if ((domain = (IlrLightweightDomainValueProvider) cache_members.get(member.getFullyQualifiedName() + id)) != null) {
-				return domain;
+		DomainWrapper domainWrapper = (DomainWrapper) cache_members.get(member.getFullyQualifiedName() + id);
+		if (domainWrapper != null) {
+			if (domainWrapper.recent(editing ? PERIOD_CHECK_IF_MODIFIED_WHEN_EDITING : PERIOD_CHECK_IF_MODIFIED) || session == null) {
+				// for performance reason, return the domain if it was inserted recently (to avoid the resource lookup)
+				return domainWrapper.domain;
 			}
+		}
+		else if (session == null) {
 			throw new IlrLightweightDomainException("null session", null);
 		}
 
@@ -326,6 +347,13 @@ public class LightweightDomainResourceMgr {
 			if (((IlrLightweightDomainResourceProvider) domain).sameContent (resource))
 			{
 				LOGGER.finer( new StringBuilder(projectAndBranch).append(": resource file '").append(resourceName).append("' has not changed").toString() );
+				
+				if (domainWrapper != null) {
+					domainWrapper.reset();
+				} else {
+					cache_members.put(member.getFullyQualifiedName() + id, this.new DomainWrapper(domain));
+				}
+				
 				return domain;
 			}
 			LOGGER.fine( new StringBuilder(projectAndBranch).append(": resource file '").append(resourceName).append("' has changed and needs to be reloaded").toString() );
@@ -344,7 +372,7 @@ public class LightweightDomainResourceMgr {
 
         // set the 2 caches
 		cache_resources.put(uuid + id, domain);
-		cache_members.put(member.getFullyQualifiedName() + id, domain);
+		cache_members.put(member.getFullyQualifiedName() + id, this.new DomainWrapper(domain));
 		
 		if (LOGGER.isLoggable(Level.FINE)) {
 			StringBuilder sb = new StringBuilder(projectAndBranch)
