@@ -44,8 +44,8 @@ public class LightweightDomainResourceMgr {
 	static final String CLASS_FQN = LightweightDomainResourceMgr.class.getCanonicalName();
 	static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
 	
-	static long PERIOD_CHECK_IF_MODIFIED              =  20L;	// seconds
-	static long PERIOD_CHECK_IF_MODIFIED_WHEN_EDITING =  10L;	// seconds
+	static long PERIOD_CHECK_IF_MODIFIED              =  600L;	// seconds
+	static long PERIOD_CHECK_IF_MODIFIED_WHEN_EDITING =   60L;	// seconds
 	
 	static final String PROP_DOMAIN = "domain";
 	static final int MAX_CACHE_SIZE = 10;
