@@ -245,7 +245,7 @@ public class LightweightDomainResourceMgr {
 		return null;
 	}
 
-	boolean hasExpectedProps (IlrMember member) {
+	private boolean hasExpectedProps (IlrMember member) {
 		return LightweightDomainValueInfo.KEY.equals((String) member.getPropertyValue("valueInfo"));
 	}
 
@@ -262,7 +262,7 @@ public class LightweightDomainResourceMgr {
 			bNewProperties = true;
 
 			if (resourceName.trim().isEmpty()) {
-				throw new IlrLightweightDomainException("empty custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);
+				throw getException (member, "empty custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);
 			}
 			
 			valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_FORMAT);
@@ -284,7 +284,7 @@ public class LightweightDomainResourceMgr {
 				providerClassName = IlrLightweightExcelDomainProvider.class.getCanonicalName();
 			}
 			else {
-				throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_FORMAT + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_PROVIDERS));
+				throw getException (member, "Invalid value for custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_FORMAT);
 			}
 		}
 		else
@@ -292,17 +292,18 @@ public class LightweightDomainResourceMgr {
 			resourceName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);		
 			if (resourceName == null) {
 				// if neither LIGHTWEIGHT_RESOURCE nor DOMAIN_PROVIDER_RESOURCE are defined, report that the preferred one LIGHTWEIGHT_RESOURCE is missing
-				throw new IlrLightweightDomainException("missing custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);
+				throw getException (member, "missing custom property", IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_RESOURCE);
+
 			}
 			if (resourceName.trim().isEmpty()) {
-				throw new IlrLightweightDomainException("empty custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);
+				throw getException (member, "empty custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER_RESOURCE);
 			}
 			valueProviderName = (String) member.getPropertyValue(IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
 			if (valueProviderName == null) {
-				throw new IlrLightweightDomainException("missing custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
+				throw getException (member, "missing custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
 			}
 			if (!Arrays.asList(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS).contains(valueProviderName)) {
-				throw new IlrLightweightDomainException("Invalid value for the custom property '" + IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER + "' in the BOM", "valid values are " + Arrays.toString(IlrLightweightAbstractExcelDomainProvider.EXCEL_PROVIDERS));
+				throw getException (member, "Invalid value for custom property", IlrLightweightAbstractExcelDomainProvider.DOMAIN_PROVIDER);
 			}
 			providerClassName = (valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.LIGHTWEIGHT_EXCEL_2007) ||
 									    valueProviderName.equals(IlrLightweightAbstractExcelDomainProvider.EXCEL_2007_PROVIDER)) ?
@@ -387,7 +388,17 @@ public class LightweightDomainResourceMgr {
 		return domain;
 	}
 
-	IlrResource findResource (String resourceName, IlrSession session) throws IlrLightweightDomainException
+	private IlrLightweightDomainException getException (IlrMember member, String msg, String property) {
+		return new IlrLightweightDomainException(new StringBuilder(msg)
+				.append(" '")
+				.append(property)
+				.append("' in ")
+				.append(member.getFullyQualifiedName())
+				.toString(),
+				"Please fix the BOM");
+	}
+	
+	private IlrResource findResource (String resourceName, IlrSession session) throws IlrLightweightDomainException
 	{		
 		IlrBrmPackage brm = session.getBrmPackage();
 
