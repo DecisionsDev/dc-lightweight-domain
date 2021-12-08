@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><jardesc>
-    <jar path="dc-lightweight-domain/lightweight-domain.jar"/>
-    <options buildIfNeeded="false" compress="true" descriptionLocation="/dc-lightweight-domain/buildJAR.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <jar path="lightweight-domain-provider/lightweight-domain-provider.jar"/>
+    <options buildIfNeeded="false" compress="true" descriptionLocation="/lightweight-domain-provider/buildJAR.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
     <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
@@ -10,7 +10,7 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <javaElement handleIdentifier="=dc-lightweight-domain/src"/>
-        <file path="/dc-lightweight-domain/preferences.properties"/>
+        <javaElement handleIdentifier="=lightweight-domain-provider/src"/>
+        <file path="/lightweight-domain-provider/preferences.properties"/>
     </selectedElements>
 </jardesc>
