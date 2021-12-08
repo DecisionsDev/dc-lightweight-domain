@@ -35,7 +35,7 @@ public class LightweightDomainStringValueTranslator extends IlrAbstractValueTran
 	public String translateValue(String value, IlrConcept concept, Node node, IlrVocabulary vocabulary) {
 		IlrLightweightDomainValueProvider domain;
 		try {
-			domain = valueInfo.getResourceMgr().findBomlessDomain(node);
+			domain = valueInfo.getResourceMgr().findBomlessDomain(node, true);
 			String b2x = valueInfo.getResourceMgr().getB2x(value, domain);
 			String s = "\"" + (null == b2x ? "" : b2x.replaceAll("\"","\\\\\"")) + "\"";
 			if (LOGGER.isLoggable(Level.FINER)) {	
