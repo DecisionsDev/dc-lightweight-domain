@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.rules.studio.model.decisionservice:Operation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.ibm.rules.studio.model.decisionservice="http://com.ibm.rules.studio/model/decisionservice.ecore" xmlns:ilog.rules.studio.model.query.extractor="http://ilog.rules.studio/model/query/extractor.ecore" rulesetName="validation" usingRuleflow="true" ruleflowName="main" targetRuleProjectName="sample lightweight domain">
+  <name>validation</name>
+  <uuid>300e4163-7b63-47dc-800d-af76feab4835</uuid>
+  <referencedVariables variableName="theOrder" variableSetName="variables" direction="IN_OUT">
+    <variableSet href="../rules/variables.var#e5e32bca-820d-4428-80d0-c967608ce38f"/>
+  </referencedVariables>
+  <ruleflow href="../rules/main.rfl#54cc17f5-4110-4ab4-9bda-f05ddb402ec5"/>
+  <extractor xsi:type="ilog.rules.studio.model.query.extractor:QueryExtractor" name="validation_extractor" validator="Default Validator"/>
+  <targetRuleProject href="../../sample%20lightweight%20domain#9f355e1c-a49f-4fe0-88ab-43ec423f8f1a"/>
+</com.ibm.rules.studio.model.decisionservice:Operation>

@@ -7,38 +7,34 @@ package com.ibm.rules;
 
 public class Order
         extends ilog.rules.xml.IlrXmlObject
-        property automaticVariable "true"
 {
     public string action domain {"Buy", "Sell"};
     public int amount;
     public string city
-        property "com.ibm.rules.domainProvider.msexcel.b2xColumn" "1"
-        property "com.ibm.rules.domainProvider.msexcel.hasHeader" "true"
-        property "com.ibm.rules.domainProvider.msexcel.labelColumn.en" "2"
-        property "com.ibm.rules.domainProvider.msexcel.sheetIndex" "0"
-        property domainProviderResource "domains/cities.xlsx"
-        property domainValueProviderName "com.ibm.rules.domainProvider.msexcel2007"
-        property valueInfo "lightweightdomain";
-    public string country domain
-        property "b2xColumn" "1"
-        property "hasHeader" "true"
-        property "labelColumn" "2"
-        property "sheetIndex" "0"
-        property resource "domains/countries.xlsx"
-        property format "msexcel2007"
-        property valueInfo "lightweightdomain";
+                property "com.ibm.rules.domainProvider.msexcel.b2xColumn" "1"
+                property "com.ibm.rules.domainProvider.msexcel.hasHeader" "true"
+                property "com.ibm.rules.domainProvider.msexcel.labelColumn.en" "2"
+                property "com.ibm.rules.domainProvider.msexcel.sheetIndex" "0"
+                property domainProviderResource "domains/cities.xlsx"
+                property domainValueProviderName "com.ibm.rules.domainProvider.msexcel2007"
+                property valueInfo "lightweightdomain";
+    public string country
+                property b2xColumn "1"
+                property format "msexcel2007"
+                property hasHeader "true"
+                property labelColumn "2"
+                property resource "domains/countries.xlsx"
+                property sheetIndex "0"
+                property valueInfo "lightweightdomain";
     public string currency
-        property resource "domains/currencies.xlsx"
-        property valueInfo "lightweightdomain";
-    public ilog.rules.xml.types.IlrDateTime dateTime;
-    public string exchange;
-    public string id;
-    public string reasons domain {"Customer Preferences", "Black Listed Stocks", "Bad Client"};
+                property resource "domains/currencies.xlsx"
+                property valueInfo "lightweightdomain";
+    public ilog.rules.xml.types.IlrDateTime dateTime domain 0,1;
     public string sector
-        property resource "domains/sectors.xls"
-        property valueInfo "lightweightdomain";
-    public string securityType domain {"Bonds", "Futures", "Stock"};
-    public string status domain {"Accepted", "Rejected", "Pending", "Blocked"};
+                property resource "domains/sectors.xls"
+                property valueInfo "lightweightdomain";
+    public string securityType domain (0,1, {"Bonds", "Futures", "Stock"});
+    public string status domain (0,1, {"Accepted", "Rejected", "Pending", "Blocked"});
     public string stock;
     public Order();
     public void setUnknownAmount();

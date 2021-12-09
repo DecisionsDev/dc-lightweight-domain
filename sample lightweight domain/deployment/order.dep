@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.rules.studio.model.decisionservice:Deployment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.ibm.rules.studio.model.decisionservice="http://com.ibm.rules.studio/model/decisionservice.ecore" ruleAppName="order" managingXom="true">
+  <eAnnotations source="ilog.rules.custom_properties">
+    <details key="Dep_Groups" value="rtsAdministrator,rtsConfigManager"/>
+    <details key="Dep_SnapshotCreationKind" value="NEVER"/>
+  </eAnnotations>
+  <name>order</name>
+  <uuid>fbb79aa0-369e-42ec-aece-d048ecb375b5</uuid>
+  <operations operationName="validation">
+    <operation href="validation.dop#300e4163-7b63-47dc-800d-af76feab4835"/>
+    <properties key="ruleset.version">
+      <value><![CDATA[1.0]]></value>
+    </properties>
+    <properties key="com.ibm.rules.engine.bytecode.generation">
+      <value><![CDATA[true]]></value>
+    </properties>
+    <properties key="ruleset.trace.enabled">
+      <value><![CDATA[false]]></value>
+    </properties>
+    <properties key="ruleset.debug.enabled">
+      <value><![CDATA[false]]></value>
+    </properties>
+    <properties key="ruleset.status">
+      <value><![CDATA[enabled]]></value>
+    </properties>
+  </operations>
+  <versionPolicies label="Increment minor version numbers" ruleset="INCREMENT_MINOR" default="true" recurrent="true">
+    <description><![CDATA[Updates the minor version for each ruleset. Makes the new version available but retains previous versions.]]></description>
+  </versionPolicies>
+  <versionPolicies label="Use the base version numbers" recurrent="true">
+    <description><![CDATA[Uses the numbers provided in the deployment configuration. Replaces the latest version of each ruleset with this release. Used for hot fixes or development.]]></description>
+  </versionPolicies>
+  <versionPolicies label="The user can define the version numbers" ruleset="MANUAL" recurrent="true">
+    <description><![CDATA[Allows you to enter your own version numbers. Used for hot fixes or updates to an earlier release.]]></description>
+  </versionPolicies>
+</com.ibm.rules.studio.model.decisionservice:Deployment>

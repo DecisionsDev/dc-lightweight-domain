@@ -1,5 +1,6 @@
 /.metadata/
 /sample2*/
 sample lightweight domain/.syncEntries
+sample lightweight domain/output/
 *.sem
 lightweight-domain-provider/lightweight-domain-provider.jar
