@@ -9,7 +9,10 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.poi.ss.usermodel.Row;
 
@@ -18,8 +21,10 @@ import ilog.rules.shared.util.IlrExcelHelper;
 
 public abstract class IlrLightweightAbstractExcelDomainProvider extends IlrLightweightDomainResourceProvider {
 
-	static final String CLASS_FQN = IlrLightweightAbstractExcelDomainProvider.class.getCanonicalName();
-	static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
+	private static final String CLASS_FQN = IlrLightweightAbstractExcelDomainProvider.class.getCanonicalName();
+	private static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
+	
+	private static Pattern pattern = Pattern.compile("return[ \t]+\"(.*)\"[ \t]*;");
 
 	public static String DOMAIN_PROVIDER_XL = "com.ibm.rules.domainProvider.msexcel";
 
@@ -102,6 +107,7 @@ public abstract class IlrLightweightAbstractExcelDomainProvider extends IlrLight
 		}
 		
 		Set<String> uniqueLabels = new LinkedHashSet<String>();
+		Set<String> uniqueB2xs   = new LinkedHashSet<String>();
 		labels = new ArrayList<String>();
 		b2xs = new HashMap<String, String>();
 
@@ -113,17 +119,34 @@ public abstract class IlrLightweightAbstractExcelDomainProvider extends IlrLight
 			
 			String b2x = IlrExcelHelper.GetStringCellValue(row.getCell(colB2X));
 			if (b2x.isEmpty()) {
-				LOGGER.finest("ignore empty B2X cell");
+				report(Level.INFO, "skip empty B2X cell");
 			    continue;
+			}
+			if (! bNewProperties)
+			{
+				/*
+				 *   when dealing with dynamic domain resouce file, the BOM2XOM cells contain values such as:
+				 *   
+				 *   	return "XYZ";
+				 *   
+				 *   we want to extract from the example below:
+				 *   
+				 *   	XYZ
+				 */
+				b2x = extract(b2x);
+			}
+			if (!uniqueB2xs.add(b2x)) {
+				report(Level.WARNING, "skip duplicate value in B2X cell", b2x);
+				continue;
 			}
 
 			String label = IlrExcelHelper.GetStringCellValue(row.getCell(colLabel));
 			if (label.isEmpty()) {
-				LOGGER.finest("ignore empty Label cell");
+				report(Level.INFO, "skip empty Label cell");
 			    continue;
 			}
 			if (!uniqueLabels.add(label)) {
-				LOGGER.finer("ignore duplicate Label: " + label);
+				report(Level.WARNING, "skip value in Label cell", label);
 				continue;
 			}
 
@@ -131,6 +154,7 @@ public abstract class IlrLightweightAbstractExcelDomainProvider extends IlrLight
 			b2xs.put(label, b2x);
 		}
 		uniqueLabels.clear();
+		uniqueB2xs.clear();
 
 		AtomicInteger idx = new AtomicInteger(0);
 		labelsTab = new String[labels.size()];		
@@ -215,5 +239,31 @@ public abstract class IlrLightweightAbstractExcelDomainProvider extends IlrLight
 
 	private boolean getBooleanPropertyValue (IlrMember member, String property) throws IlrLightweightDomainException {
 		return getBooleanPropertyValue (member, property, true, false);
+	}
+
+	/*
+	 *   input:   return "XYZ";
+	 *   output:  XYZ
+	 */
+	private String extract (String b2xWithReturn) {
+		Matcher matcher = pattern.matcher(b2xWithReturn);
+		return matcher.find() ? matcher.group(1) : b2xWithReturn;
+	}
+	
+	private void report (Level level, String msg, String value) {
+		StringBuilder b = new StringBuilder(msg);
+		if (value != null) {
+			b.append(" (")
+			 .append(value)
+			 .append(")");
+		}
+		b.append(" in ")
+		.append(getResource().getName())
+	    .append(getResource().getExtension());
+		
+		LOGGER.log(level, b.toString());
+	}
+	private void report (Level level, String msg) {
+		report(level, msg, null);
 	}
 }

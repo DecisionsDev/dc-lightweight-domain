@@ -9,10 +9,8 @@
 	<xsd:element name="order" type="order"/>
 	<xsd:complexType name="order">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="stock" type="xsd:string"/>
 			<xsd:element name="amount" type="xsd:int"/>
-			<xsd:element name="exchange" type="xsd:string"/>
 			<xsd:element name="currency" type="xsd:string"/>
 			<xsd:element name="city" type="xsd:string"/>
 			<xsd:element name="country" type="xsd:string"/>
@@ -25,7 +23,7 @@
 					</xsd:restriction>
 				</xsd:simpleType>
 			</xsd:element>
-			<xsd:element name="securityType">
+			<xsd:element name="securityType" minOccurs="0" maxOccurs="1">
 				<xsd:simpleType>
 					<xsd:restriction base="xsd:string">
 						<xsd:enumeration value="Bonds"/>
@@ -34,23 +32,14 @@
 					</xsd:restriction>
 				</xsd:simpleType>
 			</xsd:element>
-			<xsd:element name="dateTime" type="xsd:dateTime"/>
-			<xsd:element name="status">
+			<xsd:element name="dateTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="status" minOccurs="0" maxOccurs="1">
 				<xsd:simpleType>
 					<xsd:restriction base="xsd:string">
 						<xsd:enumeration value="Accepted"/>
 						<xsd:enumeration value="Rejected"/>
 						<xsd:enumeration value="Pending"/>
 						<xsd:enumeration value="Blocked"/>
-					</xsd:restriction>
-				</xsd:simpleType>
-			</xsd:element>
-			<xsd:element name="reasons">
-				<xsd:simpleType>
-					<xsd:restriction base="xsd:string">
-						<xsd:enumeration value="Customer Preferences"/>
-						<xsd:enumeration value="Black Listed Stocks"/>
-						<xsd:enumeration value="Bad Client"/>
 					</xsd:restriction>
 				</xsd:simpleType>
 			</xsd:element>

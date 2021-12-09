@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.base:VariableSet xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.base="http://ilog.rules.studio/model/base.ecore">
+  <name>variables</name>
+  <uuid>e5e32bca-820d-4428-80d0-c967608ce38f</uuid>
+  <variables name="theOrder" type="com.ibm.rules.Order" initialValue="" verbalization="the order"/>
+</ilog.rules.studio.model.base:VariableSet>
