@@ -95,7 +95,9 @@ public class LightweightDomainValueProvider extends IlrAbstractValueProvider
 	@Override
 	public String getText(Object element, Locale locale) 
 	{
-		StringBuilder sb = new StringBuilder("\"").append(element).append("\"");
+		StringBuilder sb = new StringBuilder("\"")
+								.append(null == element ? "" : element.toString().replaceAll("\"","\\\\\""))
+								.append("\"");
 		return sb.toString();
 	}
 
