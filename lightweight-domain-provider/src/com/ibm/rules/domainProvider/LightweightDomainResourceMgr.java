@@ -98,8 +98,16 @@ public class LightweightDomainResourceMgr {
 		return (domain == null ? null : domain.existLabel(label));
 	}
 
-	public String getB2x(String value, IlrLightweightDomainValueProvider domain) {
-		return (domain == null || value == null ? null : domain.getBOM2XOMMapping(value.replaceAll("\\\\\"","\"")));
+	public String getB2x(String value, IlrLightweightDomainValueProvider domain) throws IlrLightweightDomainException {
+
+		if (null == domain) {
+			throw new IlrLightweightDomainException("null domain", "cannot translate " + value);
+		}
+		if (null == value) {
+			throw new IlrLightweightDomainException("cannot translate null value", null);
+		}
+
+		return domain.getBOM2XOMMapping(value.replaceAll("\\\\\"","\""));
 	}
 
 	public Object[] getLabels(IlrLightweightDomainValueProvider domain) {	

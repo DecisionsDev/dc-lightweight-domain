@@ -37,10 +37,6 @@ public class LightweightDomainStringValueTranslator extends IlrAbstractValueTran
 		try {
 			domain = valueInfo.getResourceMgr().findBomlessDomain(node, true);
 			String b2x = valueInfo.getResourceMgr().getB2x(value, domain);
-			if (null == b2x || b2x.isEmpty()) {
-				LOGGER.severe(new StringBuilder("null or empty translation value for '").append(value).append("'").toString());
-				return null;
-			}
 			String s = new StringBuilder("\"")
 					.append(b2x.replaceAll("\"","\\\\\""))
 					.append("\"")
