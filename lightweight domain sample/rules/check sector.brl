@@ -4,7 +4,7 @@
   <uuid>62f518b0-c779-493e-92d1-65a340dea053</uuid>
   <locale>en_US</locale>
   <definition><![CDATA[if
-    the sector of 'the order' is one of {"Oil","Banking", "Rail",  "Tech", "\"R&D\""  }   
+    the sector of 'the order' is one of {"Oil","Banking", "Rail",  "Tech" }   
 then
     print "xyz";]]></definition>
 </ilog.rules.studio.model.brl:ActionRule>
