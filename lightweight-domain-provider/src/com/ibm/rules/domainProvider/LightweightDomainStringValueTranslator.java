@@ -14,8 +14,8 @@ import ilog.rules.vocabulary.model.IlrVocabulary;
  */
 public class LightweightDomainStringValueTranslator extends IlrAbstractValueTranslator
 {
-	static final String CLASS_FQN = LightweightDomainStringValueTranslator.class.getCanonicalName();
-	static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
+	private static final String CLASS_FQN = LightweightDomainStringValueTranslator.class.getCanonicalName();
+	private static final Logger LOGGER    = Logger.getLogger(CLASS_FQN);
 
 	private LightweightDomainValueInfo valueInfo;
 	
@@ -29,7 +29,7 @@ public class LightweightDomainStringValueTranslator extends IlrAbstractValueTran
 
 	/*
 	 * 	returns a string like 
-	 * 		"return \"XYZ\";"
+	 * 		"\"XYZ\""
 	 */
 	@Override
 	public String translateValue(String value, IlrConcept concept, Node node, IlrVocabulary vocabulary) {
@@ -37,9 +37,16 @@ public class LightweightDomainStringValueTranslator extends IlrAbstractValueTran
 		try {
 			domain = valueInfo.getResourceMgr().findBomlessDomain(node, true);
 			String b2x = valueInfo.getResourceMgr().getB2x(value, domain);
-			String s = "\"" + (null == b2x ? "" : b2x.replaceAll("\"","\\\\\"")) + "\"";
+			if (null == b2x || b2x.isEmpty()) {
+				LOGGER.severe(new StringBuilder("null or empty translation value for '").append(value).append("'").toString());
+				return null;
+			}
+			String s = new StringBuilder("\"")
+					.append(b2x.replaceAll("\"","\\\\\""))
+					.append("\"")
+					.toString();
 			if (LOGGER.isLoggable(Level.FINER)) {	
-				LOGGER.finer("translateValue (" + value + ") = " + s);
+				LOGGER.finer(new StringBuilder(value).append(" -> ").append(s).toString());
 			}
 			return s;
 		} 

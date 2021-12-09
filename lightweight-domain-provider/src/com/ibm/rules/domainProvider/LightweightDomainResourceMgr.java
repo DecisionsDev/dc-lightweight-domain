@@ -99,7 +99,7 @@ public class LightweightDomainResourceMgr {
 	}
 
 	public String getB2x(String value, IlrLightweightDomainValueProvider domain) {
-		return (domain == null ? null : domain.getBOM2XOMMapping(value));
+		return (domain == null || value == null ? null : domain.getBOM2XOMMapping(value.replaceAll("\\\\\"","\"")));
 	}
 
 	public Object[] getLabels(IlrLightweightDomainValueProvider domain) {	
