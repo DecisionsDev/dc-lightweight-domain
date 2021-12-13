@@ -14,4 +14,8 @@ public interface IlrLightweightDomainValueProvider
   public abstract void dispose();
 
   public abstract boolean existLabel(String label);
+  
+  public boolean olderThan(long durationInSeconds);
+  
+  public boolean recentlyCheckedIfModified(long periodInSeconds);
 }

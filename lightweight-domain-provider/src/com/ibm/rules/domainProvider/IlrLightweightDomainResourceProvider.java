@@ -7,9 +7,18 @@ import ilog.rules.teamserver.brm.IlrResource;
 
 public abstract class IlrLightweightDomainResourceProvider implements IlrLightweightDomainValueProvider
 {
+	private LocalTime creationTime;
 	private LocalTime lastCheck;
 	private byte[] data;
 	private IlrResource resource;
+
+	public IlrLightweightDomainResourceProvider ( ) {
+		creationTime = LocalTime.now();
+	}
+
+	public boolean olderThan(long durationInSeconds) {
+		return LocalTime.now().isAfter(creationTime.plusSeconds(durationInSeconds));			
+	}
 
 	public boolean recentlyCheckedIfModified (long periodInSeconds) {
 		return lastCheck != null && LocalTime.now().isBefore(lastCheck.plusSeconds(periodInSeconds));

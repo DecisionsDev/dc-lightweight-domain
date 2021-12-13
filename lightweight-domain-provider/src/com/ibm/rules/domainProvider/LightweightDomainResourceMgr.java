@@ -46,25 +46,38 @@ public class LightweightDomainResourceMgr {
 	
 	static long PERIOD_CHECK_IF_MODIFIED              =  600L;	// seconds
 	static long PERIOD_CHECK_IF_MODIFIED_WHEN_EDITING =   60L;	// seconds
+	static long MIN_TIME_IN_CACHE                     =   60L;	// seconds
 	
 	static final String PROP_DOMAIN = "domain";
-	static final int MAX_CACHE_SIZE = 10;
+	static final int INITIAL_MAX_CACHE_SIZE = 5;
 
 	@SuppressWarnings("serial")
-	static Map<String, IlrLightweightDomainValueProvider> cache_resources = Collections.synchronizedMap(new LinkedHashMap<String,IlrLightweightDomainValueProvider>(MAX_CACHE_SIZE) {
+	static Map<String, IlrLightweightDomainValueProvider> cache_resources = Collections.synchronizedMap(new LinkedHashMap<String,IlrLightweightDomainValueProvider>(INITIAL_MAX_CACHE_SIZE) {
+		int limit = INITIAL_MAX_CACHE_SIZE;
+		
 	    @SuppressWarnings("rawtypes")
 		@Override
 	    protected boolean removeEldestEntry(Map.Entry eldest) {
-	        return size() > MAX_CACHE_SIZE;
+			if (((IlrLightweightDomainResourceProvider) eldest.getValue()).olderThan(MIN_TIME_IN_CACHE) == false && size() > limit) {
+				// if we are about to remove a domain that was inserted less than MIN_TIME_IN_CACHE in the cache, then expand the cache
+				limit++;
+			}
+			return size() > limit;
 	    }		
 	});
 
 	@SuppressWarnings("serial")
-	static Map<String, DomainWrapper> cache_members = Collections.synchronizedMap(new LinkedHashMap<String, DomainWrapper>(MAX_CACHE_SIZE) {
+	static Map<String, DomainWrapper> cache_members = Collections.synchronizedMap(new LinkedHashMap<String, DomainWrapper>(INITIAL_MAX_CACHE_SIZE) {
+		int limit = INITIAL_MAX_CACHE_SIZE;
+		
 		@SuppressWarnings("rawtypes")
 		@Override
 		protected boolean removeEldestEntry(Map.Entry eldest) {
-			return size() > MAX_CACHE_SIZE;
+			if (((DomainWrapper) eldest.getValue()).olderThan(MIN_TIME_IN_CACHE) == false && size() > limit) {
+				// if we are about to remove a domain that was inserted less than MIN_TIME_IN_CACHE in the cache, then expand the cache
+				limit++;
+			}
+			return size() > limit;
 		}		
 	});
 
@@ -74,9 +87,11 @@ public class LightweightDomainResourceMgr {
 	class DomainWrapper {
 		IlrLightweightDomainValueProvider domain;
 		private LocalTime refTime;
+		private LocalTime creationTime;
 		
 		public DomainWrapper (IlrLightweightDomainValueProvider domain) {
 			this.domain = domain;
+			creationTime = LocalTime.now();
 			reset();
 		}
 		public void reset () {
@@ -84,6 +99,9 @@ public class LightweightDomainResourceMgr {
 		}
 		public boolean recent (long periodInSeconds) {
 			return LocalTime.now().isBefore(refTime.plusSeconds(periodInSeconds));
+		}
+		public boolean olderThan(long durationInSeconds) {
+			return LocalTime.now().isAfter(creationTime.plusSeconds(durationInSeconds));			
 		}
 	}
 	
@@ -389,7 +407,9 @@ public class LightweightDomainResourceMgr {
 				.append(resourceName)
 				.append("' loaded size=")
 				.append(labels.size())
-				.append(", cache=")
+				.append(", cache(")
+				.append(cache_resources.size())
+				.append(")=")
 				.append(cache_resources.keySet().toString());
 				LOGGER.fine(sb.toString());
 		}
