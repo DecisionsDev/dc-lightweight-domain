@@ -96,5 +96,5 @@ The content of the JAR should be:
 ```
 com/ibm/rules/domainProvider/*.class
 META-INF
-preferences.properties
+webui/info/preferences.properties
 ```

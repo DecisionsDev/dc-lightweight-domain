@@ -10,7 +10,7 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <folder path="/lightweight-domain-provider/webui"/>
         <javaElement handleIdentifier="=lightweight-domain-provider/src"/>
-        <file path="/lightweight-domain-provider/preferences.properties"/>
     </selectedElements>
 </jardesc>
