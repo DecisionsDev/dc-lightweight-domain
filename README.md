@@ -1,3 +1,6 @@
+![GitHub last commit](https://img.shields.io/github/last-commit/ODMDev/dc-lightweight-domain)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)]
+
 # Decision Center lightweight domain provider
  
  ## Overview
@@ -88,16 +91,23 @@ public class Order
 >   - the property `com.ibm.rules.domainProvider.msexcel.valueColumn` is optional
 >   - all the other properties are mandatory
 
-## Deploying the lightweight domain provider
-Either use [buildJAR.jardesc](lightweight-domain-provider/buildJAR.jardesc) or Maven (see [pom.xml](lightweight-domain-provider/pom.xml)) to build the JAR.
-Then add it to both decisioncenter.war and teamserver.war into WEB-INF/lib.
+## Building
+### using Maven
+* Edit the [pom.xml](lightweight-domain-provider/pom.xml) file to define the dependency to Decision Center Jars and the URL of your remote repository
+* Run the maven command:
+```
+mvn clean install
+```
+### using Ant
+* Edit the [build.properties](lightweight-domain-provider/build.properties) file to set the `odm.dir` property to your ODM install directory.
+* Run the default Ant target to build `query-extension.jar`
+```
+ant -f build.xml
+```
+## Running
+To run the sample, add the JAR generated in the `target` directory to decisioncenter.war (in WEB-INF/lib). 
+Deploy the [lightweight domain sample](lightweight%20domain%20sample) and edit rules and Decision Tables in that project. 
 
-The content of the JAR should be:
-```
-com/ibm/rules/domainProvider/*.class
-META-INF
-webui/info/preferences.properties
-```
 # Issues and contributions
 For issues relating specifically to the Dockerfiles and scripts, please use the [GitHub issue tracker](../../issues).
 We welcome contributions following [our guidelines](CONTRIBUTING.md).

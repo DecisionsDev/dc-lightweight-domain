@@ -1,0 +1,37 @@
+<project default="jar" basedir=".">
+
+	<property name="src.dir" location="${basedir}/src/main/java" />
+	<property name="res.dir" location="${basedir}/src/main/resources" />
+	<property name="bin.dir" location="${basedir}/bin" />
+
+	<property file="${basedir}/build.properties"/>
+	
+	<path id="compile.classpath">
+		<fileset dir="${odm.dir}/teamserver/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${odm.dir}/studio/lib"/>
+	</path>
+
+	<target name="clean-bin">
+		<delete dir="${bin.dir}" />
+		<mkdir  dir="${bin.dir}" />
+	</target>
+
+	<target name="compile" depends="clean-bin">
+		<javac srcdir="${src.dir}" 
+               destdir="${bin.dir}" 
+               includeantruntime="false">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${basedir}/lightweight-domain-provider.jar">
+             <fileset dir="${bin.dir}"/>
+             <fileset dir="${res.dir}"/>
+        </jar>
+	</target>
+
+</project>
+

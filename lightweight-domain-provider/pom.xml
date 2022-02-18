@@ -1,69 +1,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ibm.odm.tools</groupId>
-    <artifactId>LightweightDomainProvider</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>lightweight-domain-provider</artifactId>
+    <version>1.0.0-${odm.version}-SNAPSHOT</version>
+    <description>Enables to use domains in Decision Center without importing the domains content into the BOM</description>
     <properties>
-        <odm.version>8.10.2.2</odm.version>
+        <odm.version>8.10.5.0</odm.version>
         <repositoryId>odm-snapshots</repositoryId>
         <repositoryUrl>https://eu.artifactory.swg-devops.com:443/artifactory/hyc-ai-tribe-l3-team-odm-release-maven-local</repositoryUrl>
     </properties>
 
     <distributionManagement>
+        <repository>
+            <id>${repositoryId}</id>
+            <url>${repositoryUrl}</url>
+        </repository>
         <snapshotRepository>
             <id>${repositoryId}</id>
             <url>${repositoryUrl}</url>
         </snapshotRepository>
     </distributionManagement>
 
-    <dependencies><dependency>
+    <dependencies>
+        <dependency>
             <groupId>com.ibm.odm</groupId>
             <artifactId>decisioncenter-dependencies</artifactId>
             <version>${odm.version}</version>
             <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.0.1</version>
+        </dependency>
     </dependencies>    
 
-
     <build>
-        <sourceDirectory>src/java</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>src/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/resources</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
 </project>
