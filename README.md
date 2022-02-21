@@ -1,5 +1,6 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/ODMDev/dc-lightweight-domain)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)]
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 
 # Decision Center lightweight domain provider
  
