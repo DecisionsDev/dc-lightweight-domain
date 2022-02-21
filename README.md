@@ -100,7 +100,7 @@ mvn clean install
 ```
 ### using Ant
 * Edit the [build.properties](lightweight-domain-provider/build.properties) file to set the `odm.dir` property to your ODM install directory.
-* Run the default Ant target to build `query-extension.jar`
+* Run the default Ant target to build `lightweight-domain-provider.jar`
 ```
 ant -f build.xml
 ```
