@@ -20,8 +20,9 @@
 
 	<target name="compile" depends="clean-bin">
 		<javac srcdir="${src.dir}" 
-               destdir="${bin.dir}" 
-               includeantruntime="false">
+               destdir="${bin.dir}"
+               includeantruntime="false"
+               compiler="modern">
 			<classpath refid="compile.classpath" />
 		</javac>
 	</target>
